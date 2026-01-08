@@ -12,11 +12,12 @@ oauth_schema = OAuth2PasswordBearer('/usuario/logar_usuario')
 
 def verificar_toke(token: str = Depends(oauth_schema)):
     try:
-        dic_info_u = jwt.decode(token, SECRETES_KEY, ALG)# type: ignore
+        dic_info_u = jwt.decode(token, str(SECRETES_KEY), ALG)
         id_user = dic_info_u.get('sub')
+        return int(id_user) # type: ignore
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Acesso Negado'
         )
-    return int(id_user) # type: ignore
+    

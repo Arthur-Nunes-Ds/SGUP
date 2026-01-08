@@ -31,8 +31,6 @@ class BaseCriarUsuario(BaseModel):
     senha : str
     email : str
 
-class BaseLogarUsuario(BaseModel):
-    email: str
-    senha : str
-
-
+class BaseEditarUsuarioi(BaseModel):
+    nome : str | None = None
+    senha : str | None = None

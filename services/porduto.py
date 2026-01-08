@@ -2,9 +2,11 @@ from conection import session
 #fala que o paremetro e opicional para o fastapi
 from typing import Optional
 from fastapi import APIRouter, HTTPException,status
+#from .depeds import verificar_toke
 from model.produtos import Produto,BaseCadastraProtudo, BaseVenderProtudo,BaseEditarProtudo
 from sqlalchemy.exc import IntegrityError
 
+#FIXME - bloque todas rotas para que só o fucionario possa acessar
 Rota_Produto = APIRouter()
 
 @Rota_Produto.post('/cadastra_produto')
@@ -114,7 +116,7 @@ def vender_protudo(base: BaseVenderProtudo):
         )
 
     elif qnt_ser_removida == 0:
-        dell_produto(id).keys()
+        dell_produto(id)
         return {"mensagem": "produto vendido e removido do depoisto",
                 'custo_da_venda':custo}
     else:
