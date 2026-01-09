@@ -4,4 +4,5 @@ from .porduto import Rota_Produto
 from .usario import Rota_Usuario
 from .admin import Rota_Adm
 from .publics import Rota_Publics
-__all__ = ['Rota_Produto','Rota_Usuario','Rota_Adm','Rota_Publics']
+from .execel import Rota_Excel
+__all__ = ['Rota_Produto','Rota_Usuario','Rota_Adm','Rota_Publics','Rota_Excel']

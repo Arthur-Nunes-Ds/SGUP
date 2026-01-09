@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from services import Rota_Produto, Rota_Usuario, Rota_Adm, Rota_Publics
+from services import Rota_Produto, Rota_Usuario, Rota_Adm, Rota_Publics, Rota_Excel
 
 app = FastAPI(title='SGU', summary=' ')
 
@@ -44,4 +44,10 @@ app.include_router(
     tags=["Produtos"]      
 )
 
+#execel
+app.include_router(
+    Rota_Excel,
+    prefix='/dwoload',
+    tags=['Execel_Exporte']
+)
 

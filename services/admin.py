@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv()
+is_debug = bool(int(getenv('IS_DEBUG'))) # type: ignore
 
 #aplica uma depedencia em todas as rotas desse arquivo
 Rota_Adm = APIRouter(dependencies=[Depends(RolePermitidas(['adm']))])
@@ -93,7 +94,7 @@ def editar_fucionario(base: BaseEditarFucionario, session = get_session):
         )
 
 #rotas feitas só para debug
-@Rota_Adm.delete('/dell_all_user/{senha_db}', include_in_schema=False, tags=['debug'])
+@Rota_Adm.delete('/dell_all_user/{senha_db}', include_in_schema=is_debug, tags=['debug'])
 def dell_all_user(senha_db : str, session: Session = Depends(get_session)):
     '''ATENÇÃO AQUI VOCÊ VAI DELETAR TUDO QUE TIVER NA TABELA USUARIO \
     \n INCLUINDO O ADM. OS USER AINDA PODERAR FAZER APLICAÇÃO POR 5 MINUTOS PORQUASA DO JWT\
@@ -108,7 +109,7 @@ def dell_all_user(senha_db : str, session: Session = Depends(get_session)):
             detail='você não pode fazer isso'
         )
 
-@Rota_Adm.delete('/dell_all_produtos/{senha_db}',include_in_schema=False, tags=['debug'])
+@Rota_Adm.delete('/dell_all_produtos/{senha_db}',include_in_schema=is_debug, tags=['debug'])
 def dell_all_produtos(senha_db: str, session: Session = Depends(get_session)):
     '''ATENÇÃO AQUI VOCÊ VAI DELETAR TUDO QUE TIVER NA TABELA PROTUDOS\
     \n PARA QUE A AÇÃO SEJA PERMITE VOCÊ DEVE PASSA A SENHA DO USER QUE ESTÁ USANDO PARA MANIPULAR O BANCO.'''
@@ -122,7 +123,7 @@ def dell_all_produtos(senha_db: str, session: Session = Depends(get_session)):
             detail='você não pode fazer isso'
         )
 
-@Rota_Adm.delete('/dell_all/{senha_db}',include_in_schema=False, tags=['debug'])
+@Rota_Adm.delete('/dell_all/{senha_db}',include_in_schema=is_debug, tags=['debug'])
 def dell_all(senha_db: str, session: Session = Depends(get_session)):
     '''ATENÇÃO AQUI VOCÊ VAI DELETAR TUDO QUE TIVER NA TABELA PROTUDOS E USUARIOS\
     \n PARA QUE A AÇÃO SEJA PERMITE VOCÊ DEVE PASSA A SENHA DO USER QUE ESTÁ USANDO PARA MANIPULAR O BANCO.'''

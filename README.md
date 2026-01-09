@@ -1,6 +1,7 @@
 Comando para iniciar o servidor da api:
-
-uvicorn main:app --reload
+```bash
+uvicorn main:app --reload 
+```
 
 Principais recurso usado no projeto:
 
