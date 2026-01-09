@@ -1,53 +1,81 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from services import Rota_Produto, Rota_Usuario, Rota_Adm, Rota_Publics, Rota_Excel
+from services import Rota_Produto, Rota_Cliente, Rota_Adm, Rota_Publics, Rota_Excel
 
-app = FastAPI(title='SGU', summary=' ')
+app = FastAPI(title='SGU')
 
-#include_in_schema => é se a rota vai ser mostratda no /docs ou não
-    #o padrão é que ela sera mostrada
-app.get('/', include_in_schema=False)
+#include_in_schema => indica se a rota será exibida no /docs ou não.
+    #O padrão é que ela será exibida.
+@app.get('/', include_in_schema=False)
 def home_to_doc():
-    #toda fez que o user entrar nessa rota ele vai ser rederecionato
-        #altomaticamente para /docs
+    #Toda vez que o usuário acessar essa rota, ele será redirecionado
+    #automaticamente para /docs.
     return RedirectResponse(url='/docs')
 
-#public
+#SECTION - Public
 app.include_router(
-    #todas as rotas de usuario.py começarão com /usuario
+    #Todas as rotas deste grupo começarão com /public.
     Rota_Publics,
-    #fala o inicio do endpote. Ou seja qual request que fezer para qualquer função dentro de usuario.py
-        #ele vai ficar assim /usuario/end_point <- sendo que o end_point pode muda agora mas o /usu.. não
+    #Define o prefixo do endpoint. Para qualquer função neste roteador,
+    #o caminho ficará assim: /public/endpoint — o endpoint pode mudar, mas /public não.
     prefix='/public',
-    #organiza as rotas sob este grupo no /docs   
+    #Organiza as rotas deste grupo na documentação (/docs).
     tags=["Public"]
 )
 
-#user
+#SECTION - Cliente
 app.include_router(
-    Rota_Usuario,
-    prefix='/usuario',
-    tags=["Usuario"]
+    Rota_Cliente,
+    prefix='/cliente',
+    tags=["Cliente"]
 )
 
-#admin
+#SECTION - Admin
 app.include_router(
     Rota_Adm,
     prefix='/adm',
     tags=["Admin"]
 )
 
-#produtos
+#SECTION - Produtos
 app.include_router(
     Rota_Produto,
-    prefix="/produtos", 
-    tags=["Produtos"]      
+    prefix="/produtos",
+    tags=["Produtos"]
 )
 
-#execel
+#SECTION - Excel
 app.include_router(
     Rota_Excel,
     prefix='/dwoload',
     tags=['Execel_Exporte']
 )
+
+#Executa o servido altomaticamente quando o arquivo main.py for executado
+if __name__ == "__main__":
+    import uvicorn
+    import config
+    from argparse import ArgumentParser
+
+    #Cria uma pase para o main.py aceitar comando de incialicação como --debug, --port, etc.
+    paremtro = ArgumentParser(description='Inicia o servidor SGU')
+    #Passo o argumento de inicilização, se o paremetro for passado ele e lido como true, e um help para que ele server
+    paremtro.add_argument('--debug', action='store_true', help='Executa em modo debug')
+    paremtro.add_argument('--sqlite', action='store_true', help='Cria um sqlite "banco.db"')
+    #o type -> é o tipo que precisar ser pasado e o Default é o falo padrão caso não passado
+    paremtro.add_argument('--port', type=int, default= 8000, help='Porta do projeto, o padrão: 8000')
+    paremtro.add_argument('--host', type=str, default= "localhost", help='IP do projeto, o padrão: localhost')
+    
+    #Analisa os argumentos
+    args = paremtro.parse_args()
+    
+    config.DEBUG = args.debug
+    config.SQLITE = args.sqlite
+
+    #Só executa se --debug foi passado
+    if args.debug == True:
+        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True)
+    else:
+        #Modo produção (sem reload)
+        uvicorn.run("main:app", host=args.host, port=args.port, reload=False)
 

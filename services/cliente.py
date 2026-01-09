@@ -4,26 +4,45 @@ from fastapi import APIRouter, HTTPException,status, Depends
 from model.usarios import Usuario, BaseEditarUsuarioi
 from .depeds import RolePermitidas
 
-Rota_Usuario = APIRouter()
+Rota_Cliente = APIRouter()
 
-#a depends basicamente fala que depende o do verifica_toke ou seja executa a função
-#e pega a resposta dela
-@Rota_Usuario.delete('/dell_user')
+#SECTION - Dell User
+#A Depends indica que a rota depende de RolePermitidas
+    #assim executa essa classe e utiliza sua resposta
+@Rota_Cliente.delete('/dell_user')
 def dell_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
+    """Remove o cliente pelo JWT. \
+    \nPermissões: cliente \\ adm.\
+    \nRetorno:\
+    \n-{"mensagem": "cliente removido."}\
+    \nErros:\
+    \n-404: cliente não cadastrado/encontrado."""
     query_u = session.query(Usuario).filter_by(id = id_user, role = 'cliente').delete()
 
     if query_u:
         session.commit()
-        return {"mensagem": "user removido"}
+        return {"mensagem": "cliente removido."}
     else:
         raise HTTPException(
              status_code=status.HTTP_404_NOT_FOUND,
-             detail="user não cadastrado/encontrado"
+             detail="cliente não cadastrado/encontrado."
         )
     
-@Rota_Usuario.post('/editar_user')
+#SECTION - Editar Cliente    
+@Rota_Cliente.post('/editar_cliente')
 def editar_user(base : BaseEditarUsuarioi, id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
-    '''caso não queira altera o dado do protudo basta só não pasa a chave'''
+    """\nEdita dados do cliente (nome e/ou senha).\
+    \nPara não alterar um campo, não o envie na requisição.\
+    \nParâmetros:\
+    \n-nome : str \
+    \n-senha : str\
+    \nPermissões: cliente \\ adm.\
+    \nRetorno:\
+    \n-{"mensagem": "cliente editado com sucesso."}.\
+    \nErros:\
+    \n-421: Informe um novo nome ou uma nova senha.\
+    \n-404: Cliente não cadastrado/encontrado."""
+
     query_u = session.query(Usuario).filter_by(id = id_user, role = 'cliente').first()
     if query_u:
         if base.senha != None :
@@ -35,24 +54,31 @@ def editar_user(base : BaseEditarUsuarioi, id_user: int = Depends(RolePermitidas
         if base.nome == None and base.senha == None:
             raise HTTPException(
                 status_code=status.HTTP_421_MISDIRECTED_REQUEST,
-                detail='informe uma nova Nome ou uma nova Senha para editar o user'
+                detail='Informe um novo Nome ou uma nova Senha.'
             )
 
         session.commit()
-        return {'mesagem': 'user editado com sucesso'}
+        return {'mensagem': 'cliente editado com sucesso.'}
     else:
         raise HTTPException(
              status_code=status.HTTP_404_NOT_FOUND,
-             detail="user não cadastrado/encontrado"
+             detail="Cliente não cadastrado/encontrado."
         )
-    
-@Rota_Usuario.get('/dados_user')
+
+#SECTION - Dados Cliente
+@Rota_Cliente.get('/dados_cliente')
 def dados_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
+    """\nObtém os dados do cliente (nome e email).\
+    \nRetorno:\
+    \n-{"mensagem": {"nome": ..., "email": ...}}.\
+    \nErros:\
+    \n-404: cliente não encontrado."""
+    
     query_u = session.query(Usuario).filter_by(id = id_user).first()
 
     if query_u != None:
         return {
-            'mesagem':{
+            'mensagem':{
                 'nome' : query_u.nome,
                 'email' : query_u.email
             }
@@ -60,6 +86,6 @@ def dados_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='user não existe'
+            detail='Cliente não existe.'
         )
     

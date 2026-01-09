@@ -5,34 +5,48 @@ from conection import engine
 from io import BytesIO
 import pandas as pd
 
-Rota_Excel = APIRouter(dependencies=[Depends(RolePermitidas(['adm','fucionario']))])
-Admin_Excel = APIRouter(dependencies=[Depends(RolePermitidas(['adm']))],tags=['Admin'])
+Rota_Excel = APIRouter(dependencies=[Depends(RolePermitidas(['adm', 'fucionario']))])
+Admin_Excel = APIRouter(dependencies=[Depends(RolePermitidas(['adm']))], tags=['Admin'])
 
+#SECTION - User 
 @Admin_Excel.get('/usuarios.xlsx')
 def get_user():
-    #pega todos os dados da tabela direto do banco e já transforma para dataframe(tipo de dados do pandas)
+    """\nExporta a tabela de usuários em formato Excel (.xlsx).\
+        \nPermissões: adm.\
+        \nRetorno:\
+        \n-Arquivo usuarios.xlsx para download.\
+        \nErros:\
+        \n-Nenhum erro específico."""
+    #Pega todos os dados da tabela direto do banco e transforma para DataFrame (tipo de dados do pandas)
     table_u = pd.read_sql_table('usuarios', engine)
-    #o io.BytesIO() vai me permite joga tudo numa 'casa' da memoria ran do sistema; assim vou escrever o sitema na ran do os
+    #O BytesIO() permite armazenar tudo em uma posição da memória RAM do sistema, assim o arquivo é escrito na RAM do OS
     saida = BytesIO()
-    #evitar da erro ou fecha a tebala incompleta, o 'openpyxl' é o drive que faz isso
+    #Evita erros ou fechamento incompleto da tabela. O 'openpyxl' é o driver que permite manipular Excel com uma precição melhor 
     with pd.ExcelWriter(saida, engine='openpyxl') as execel:
-        #escrevr o datafreme no arquivo execel, sheet_name= nome da aba
-        table_u.to_excel(execel, sheet_name='usuarios',index=False)
-    #faz o ponteiro volta para o zero da ram(pense na ran como uma lista)
+        #Escreve o DataFrame no arquivo Excel, sheet_name = nome da aba
+        table_u.to_excel(execel, sheet_name='usuarios', index=False)
+    #Faz o ponteiro voltar para o início da RAM (pense na RAM como uma lista)
     saida.seek(0)
-    #fala para o navegado que é para baixar o arquivo e surgere o nome dele
+    #Informa ao navegador que é para baixar o arquivo e sugere o nome dele
     headers = {"Content-Disposition": "attachment; filename=usuarios.xlsx"}
-    #classe do Fastapi que permite processar arquivo na requissições
+    #Classe do FastAPI que permite processar arquivos nas requisições
     return StreamingResponse(
         saida,
-        #aqui é o navegado indetificar o tipo de arquivo. os tipo você copnsegue pega no site https://docs.python.org/3/library/mimetypes.htm
+        #Aqui o navegador identifica o tipo de arquivo. Os tipos você consegue consultar em https://docs.python.org/3/library/mimetypes.html
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers=headers,
     )
 
+#SECTION - Produtos
 @Rota_Excel.get('/produtos.xlsx', tags=['Produtos'])
 def get_protudo():
-    table_p = pd.read_sql_table('produtos',engine)
+    """\nExporta a tabela de produtos em formato Excel (.xlsx).\
+        \nPermissões: adm \\ funcionario.\
+        \nRetorno:\
+        \n-Arquivo produtos.xlsx para download.\
+        \nErros:\
+        \n-Nenhum erro específico."""
+    table_p = pd.read_sql_table('produtos', engine)
     saida = BytesIO()
     with pd.ExcelWriter(saida, engine='openpyxl') as execel:
         table_p.to_excel(execel, sheet_name='produtos', index=False)
@@ -44,9 +58,16 @@ def get_protudo():
         headers=headers,
     )
 
+#SECTION - All
 @Admin_Excel.get('/all_tabelas.xlsx')
 def get_all():
-    table_p = pd.read_sql_table('produtos',engine)
+    """\nExporta todas as tabelas (produtos e usuários) em um único arquivo Excel (.xlsx).\
+        \nPermissões: adm.\
+        \nRetorno:\
+        \n-Arquivo all_tabelas.xlsx para download com múltiplas abas.\
+        \nErros:\
+        \n-Nenhum erro específico."""
+    table_p = pd.read_sql_table('produtos', engine)
     table_u = pd.read_sql_table('usuarios', engine)
     saida = BytesIO()
     with pd.ExcelWriter(saida, engine='openpyxl') as execel:
@@ -61,4 +82,3 @@ def get_all():
     )
 
 Rota_Excel.include_router(Admin_Excel)
-                                                

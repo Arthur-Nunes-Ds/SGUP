@@ -11,28 +11,31 @@ load_dotenv()
 SECRETES_KEY = getenv('SECRETES_KEY')
 ALG = getenv('ALG')
 
-#base para tranca rota
+#Base para trancar rota
 oauth_schema = OAuth2PasswordBearer('/public/logar_usuario/')
 
 def verificar_toke(token: str = Depends(oauth_schema)):
     try:
+        #Decodifica o token para um dicionário
         dic_info_u = jwt.decode(token, str(SECRETES_KEY), ALG)
         
         return dic_info_u 
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Acesso Negado'
+            detail='acesso negado'
         )
-    
+
+#A classe é melhor do que função nesse caso, pois ela retorna o ID já como int
+    #e o Depends do FastAPI não aceitaria se fosse função dando o mesmo retorno
 class RolePermitidas:
     def __init__(self, roles: list):
         self.roles_depedecia = roles
-    
-    # o call me permite eu só meceiona o objto como se ele foce uma func
+
+    #O __call__ me permite usar o objeto como se ele fosse uma função
     def __call__(self, user=Depends(verificar_toke), session: Session = Depends(get_session)): 
-        query = session.query(Usuario).filter_by(role = 'adm').all()
-        #o len vai garantir que seja possivel só cadastra uma adm
+        query = session.query(Usuario).filter_by(role='adm').all()
+        #O len vai garantir que só tem apenas um admi
         if len(query) <= 1:
             if user['role'] not in self.roles_depedecia :
                 raise HTTPException(
@@ -44,7 +47,7 @@ class RolePermitidas:
         else:
             raise HTTPException(
                 status_code=status.HTTP_423_LOCKED,
-                detail='não pode der 2 user com a role de adm'
+                detail='não pode der mais de 1 user com a role de adm'
             )
-        
-       
+
+
