@@ -28,12 +28,14 @@ if __name__ == "__main__":
     #Passo o argumento de inicilização, se o paremetro for passado ele e lido como true, e um help para que ele server
     paremtro.add_argument('--debug', action='store_true', help='Executa em modo debug')
     paremtro.add_argument('--sqlite', action='store_true', help='Cria um sqlite "banco.db"')
+    paremtro.add_argument('--htpps', action='store_true', help='Ativa o htpps do servido. necessario os certificados ficarem em: /cert')
     #o type -> é o tipo que precisar ser pasado e o Default é o falo padrão caso não passado
     paremtro.add_argument('--port', type=int, default= 8000, help='Porta do SGU, o padrão: 8000')
     paremtro.add_argument('--host', type=str, default= "localhost", help='IP do SGU, o padrão: localhost')
     #nargs -> me fala que eu posso varios paremtros como por exempl-> pip install pandas fastapi flet
         #assim tuddo isso vai ser baixodo pelo pip 
     paremtro.add_argument('--host-fronte', nargs='*', type=str, default=['*'] ,help='Lista de IP do fronte')
+
 
     #Analisa os argumentos
     args = paremtro.parse_args()
@@ -42,15 +44,27 @@ if __name__ == "__main__":
     with open('config/.sgu_config.json', 'w') as f:
         dump({'DEBUG': args.debug, 'SQLITE': args.sqlite, 'HOST_FRONT': args.host_fronte}, f)
 
+    _ssl_certfile = None
+    _ssl_keyfile = None
+    if args.htpps == True: 
+       path_ssl_certfile =Path('/certs/cert.pem')
+       path_ssl_keyfile = Path('/certs/key.pem')
+       if path_ssl_certfile.exists() and path_ssl_keyfile.exists():
+            _ssl_certfile = '/certs/cert.pem' 
+            _ssl_keyfile = '/certs/key.pem' 
+       else:
+           print('não foi possivel achar os certificados verifica o nomes deles')
+
+
     #o unicorvn tem que se puxado antes para que de tempo das var DEBUG e SQLITE serem alterada
     import uvicorn
-
+    
     #Só executa se --debug foi passado
     if args.debug == True:
-        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True)
+        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True, ssl_certfile=_ssl_certfile, ssl_keyfile=_ssl_keyfile)
     elif args.debug == False and args.sqlite == False:
         #Modo produção (sem reload)
-        uvicorn.run("main:app", host=args.host, port=args.port, reload=False)
+        uvicorn.run("main:app", host=args.host, port=args.port, reload=False,ssl_certfile=_ssl_certfile, ssl_keyfile=_ssl_keyfile)
     else:
         print('por motivode seguranção o código não sera executado em modo de produção')
-        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True)
+        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True, ssl_certfile=_ssl_certfile, ssl_keyfile=_ssl_keyfile)

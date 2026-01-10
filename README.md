@@ -4,12 +4,13 @@
 ```bash
  python SGU.py
 ```
-# Argumentos de inicialização opcionais:
-- `--debug`: Inicia o projeto em modo de debug, abilita a regarga automática ao detectar mudanças no código exemplo: `SGU.py --debug`;
-- `--sqlite`: Utiliza o banco de dados SQLite ao invés do banco de dados padrão exemplo: `SGU.py --sqlite`;
-- `--host <endereço_ip>`: Define o endereço IP onde o servidor irá escutar (padrão: `localhost`) exemplo: `SGU.py --host 0.0.0.0`;
-- `--port <número_porta>`: Define a porta onde o servidor irá escutar (padrão: `8000`) exemplo: `SGU.py --port 8080`;
-- `--host-frontend <endereço_ip> <dns>`: Define o endereço IP do frontend que irá consumir a API(padrão: `[*]`, todos) exemplo: `SGU.py --host-frontend http://localhost:3000 http://192.168.1.100:3000`;
+# Argumentos de inicialização disponíveis:
+- `--debug`: Executa em modo debug com reload automático. Ex.: `python SGU.py --debug`
+- `--sqlite`: Cria/usa o arquivo `banco.db` (SQLite) em vez do banco padrão. Ex.: `python SGU.py --sqlite`
+- `--htpps`: Habilita HTTPS usando `/certs/cert.pem` e `/certs/key.pem` se existirem. Ex.: `python SGU.py --htpps`
+- `--host <endereco_ip>`: IP onde o servidor escuta (padrão: `localhost`). Ex.: `python SGU.py --host 0.0.0.0`
+- `--port <numero_porta>`: Porta onde o servidor escuta (padrão: `8000`). Ex.: `python SGU.py --port 8080`
+- `--host-fronte <enderecos...>`: Lista de IPs/URLs permitidos para o frontend (padrão: `*`[qualquer um]). Ex.: `python SGU.py --host-fronte http://localhost:3000 http://192.168.1.100:3000`
 
 # Principais recurso usado no projeto:
 
