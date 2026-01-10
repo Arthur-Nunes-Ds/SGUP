@@ -28,7 +28,7 @@ if __name__ == "__main__":
     #Passo o argumento de inicilização, se o paremetro for passado ele e lido como true, e um help para que ele server
     paremtro.add_argument('--debug', action='store_true', help='Executa em modo debug')
     paremtro.add_argument('--sqlite', action='store_true', help='Cria um sqlite "banco.db"')
-    paremtro.add_argument('--htpps', action='store_true', help='Ativa o htpps do servido. necessario os certificados ficarem em: /cert')
+    paremtro.add_argument('--https', action='store_true', help='Ativa o htpps do servido. necessario os certificados ficarem em: /cert')
     #o type -> é o tipo que precisar ser pasado e o Default é o falo padrão caso não passado
     paremtro.add_argument('--port', type=int, default= 8000, help='Porta do SGU, o padrão: 8000')
     paremtro.add_argument('--host', type=str, default= "localhost", help='IP do SGU, o padrão: localhost')
@@ -47,11 +47,11 @@ if __name__ == "__main__":
     _ssl_certfile = None
     _ssl_keyfile = None
     if args.htpps == True: 
-       path_ssl_certfile =Path('/certs/cert.pem')
-       path_ssl_keyfile = Path('/certs/key.pem')
+       path_ssl_certfile =Path('certs/cert.pem')
+       path_ssl_keyfile = Path('certs/key.pem')
        if path_ssl_certfile.exists() and path_ssl_keyfile.exists():
-            _ssl_certfile = '/certs/cert.pem' 
-            _ssl_keyfile = '/certs/key.pem' 
+            _ssl_certfile = 'certs/cert.pem' 
+            _ssl_keyfile = 'certs/key.pem' 
        else:
            print('não foi possivel achar os certificados verifica o nomes deles')
 
