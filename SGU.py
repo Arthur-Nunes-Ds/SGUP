@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     _ssl_certfile = None
     _ssl_keyfile = None
-    if args.htpps == True: 
+    if args.https == True: 
        path_ssl_certfile =Path('certs/cert.pem')
        path_ssl_keyfile = Path('certs/key.pem')
        if path_ssl_certfile.exists() and path_ssl_keyfile.exists():
