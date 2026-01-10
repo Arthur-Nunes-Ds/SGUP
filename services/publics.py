@@ -6,15 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from jose import jwt
 from datetime import datetime, timezone, timedelta
-from dotenv import load_dotenv
-from os import getenv
-
-load_dotenv()
-SECRETES_KEY = getenv('SECRETES_KEY')
-ALG = getenv('ALG')
-EXPIRATION_TIMER_MINUTES = int(getenv('EXPIRATION_TIMER_MINUTES')) #type: ignore
-USER_ADMIN = getenv('USER_ADMIN')
-SENHA_ADMIN = getenv('SENHA_ADMIN')
+from config import SECRETES_KEY,ALG,EXPIRATION_TIMER_MINUTES,USER_ADMIN,SENHA_ADMIN
 
 Rota_Publics = APIRouter()
 

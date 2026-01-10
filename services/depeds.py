@@ -1,15 +1,10 @@
 from jose import jwt, JWTError
 from fastapi import HTTPException,status, Depends
-from dotenv import load_dotenv
-from os import getenv
 from fastapi.security import OAuth2PasswordBearer
 from conection import get_session
 from model.usarios import Usuario
 from sqlalchemy.orm import Session
-
-load_dotenv()
-SECRETES_KEY = getenv('SECRETES_KEY')
-ALG = getenv('ALG')
+from config import SECRETES_KEY,ALG
 
 #Base para trancar rota
 oauth_schema = OAuth2PasswordBearer('/public/logar_usuario/')

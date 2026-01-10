@@ -1,23 +1,17 @@
-Para iniciar o projeto em modo de debug, 
-utilize o comando abaixo:
-```bash
- python main.py --debug
-```
+<h1 align="center">SGU</h1>
 
-Para iniciar o projeto em modo normal, 
-utilize o comando abaixo:
+# Para iniciar o SGU, utilize o comando abaixo:
 ```bash
- python main.py
+ python SGU.py
 ```
-#
-Argumentos de inicialização:
-- `--debug`: Inicia o projeto em modo de debug, abilita a regarga automática ao detectar mudanças no código.
-- `--sqlite`: Utiliza o banco de dados SQLite ao invés do banco de dados padrão.
-- `--host <endereço_ip>`: Define o endereço IP onde o servidor irá escutar (padrão: `localhost`).
-- `--port <número_porta>`: Define a porta onde o servidor irá escutar (padrão: `8000`).
+# Argumentos de inicialização opcionais:
+- `--debug`: Inicia o projeto em modo de debug, abilita a regarga automática ao detectar mudanças no código exemplo: `SGU.py --debug`;
+- `--sqlite`: Utiliza o banco de dados SQLite ao invés do banco de dados padrão exemplo: `SGU.py --sqlite`;
+- `--host <endereço_ip>`: Define o endereço IP onde o servidor irá escutar (padrão: `localhost`) exemplo: `SGU.py --host 0.0.0.0`;
+- `--port <número_porta>`: Define a porta onde o servidor irá escutar (padrão: `8000`) exemplo: `SGU.py --port 8080`;
+- `--host-frontend <endereço_ip> <dns>`: Define o endereço IP do frontend que irá consumir a API(padrão: `[*]`, todos) exemplo: `SGU.py --host-frontend http://localhost:3000 http://192.168.1.100:3000`;
 
-#
-Principais recurso usado no projeto:
+# Principais recurso usado no projeto:
 
 [![Python](https://img.shields.io/badge/Python-3.8-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)

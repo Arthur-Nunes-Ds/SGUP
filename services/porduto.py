@@ -13,6 +13,7 @@ Rota_Produto = APIRouter(dependencies=[Depends(RolePermitidas(['fucionario','adm
 @Rota_Produto.post('/cadastra_produto')
 def cadastra_protudo(base: BaseCadastraProtudo, session: Session = Depends(get_session)):
     """\nCadastra um novo produto no sistema.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara cadastrar, informe os dados na requisição.\
         \nParâmetros:\
         \n-nome : str \
@@ -51,7 +52,8 @@ def cadastra_protudo(base: BaseCadastraProtudo, session: Session = Depends(get_s
 @Rota_Produto.get('/lista_todos_protudos')
 def listar_todos_protudos(session: Session = Depends(get_session)):
     """\nLista todos os produtos cadastrados no sistema.\
-        \nPermissões: funcionario \\ adm.\
+        \nPermissões: funcionario\\adm.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nRetorno:\
         \n-{"mensagem": [{"id": ..., "nome": ..., "qnt": ..., "prc": ...}, ...]}.\
         \nErros:\
@@ -80,6 +82,7 @@ def listar_todos_protudos(session: Session = Depends(get_session)):
 def procurar_produtuo(id: Optional[int] = None, nome: Optional[str] = None, session: Session = Depends(get_session)):
     """\nProcura um produto por ID ou Nome.\
         \nPode escolher se passa só ID ou Nome do produto. Não é necessário informar os dois.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nParâmetros:\
         \n-id : int (opcional) \
         \n-nome : str (opcional)\
@@ -117,7 +120,8 @@ def procurar_produtuo(id: Optional[int] = None, nome: Optional[str] = None, sess
 @Rota_Produto.delete('/dell_produto/{id_protudo}')
 def dell_produto(id_protudo: int, session: Session = Depends(get_session)):
     """\nRemove o produto pelo ID. \
-            \nPermissões: funcionario \\ adm.\
+            \nPermissões: funcionario\\adm.\
+            \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
             \nRetorno:\
             \n-{"mensagem": "produto removido."}\
             \nErros:\
@@ -138,6 +142,7 @@ def dell_produto(id_protudo: int, session: Session = Depends(get_session)):
 @Rota_Produto.post('/vender_protudo')
 def vender_protudo(base: BaseVenderProtudo, session: Session = Depends(get_session)):
     """\nRealiza a venda de um produto, reduzindo sua quantidade no estoque.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nCaso não queira buscar o produto pelo ID, basta não informá-lo. O mesmo vale para o Nome.\
         \nParâmetros:\
         \n-id : int (opcional) \
@@ -175,6 +180,7 @@ def vender_protudo(base: BaseVenderProtudo, session: Session = Depends(get_sessi
 @Rota_Produto.post('/etidar_protudo')
 def etidar_protudo(base: BaseEditarProtudo, session: Session = Depends(get_session)):
     """\nEdita dados do produto (Quantidade e/ou Preço).\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara não alterar um campo, não o envie na requisição.\
         \nParâmetros:\
         \n-id : int \

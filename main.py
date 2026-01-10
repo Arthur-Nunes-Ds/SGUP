@@ -1,8 +1,24 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from services import Rota_Produto, Rota_Cliente, Rota_Adm, Rota_Publics, Rota_Excel
+from config import HOST_FRONT
 
 app = FastAPI(title='SGU')
+
+#Configuração de CORS (Cross-Origin Resource Sharing) -> isso permite que o backend
+    #se comunique com o frontend, mesmo que estejam em domínios diferentes.
+app.add_middleware(
+    CORSMiddleware,
+    #quem pode fazer requisições para o bac
+    allow_origins=HOST_FRONT,  
+    #permite que o navegado envie credenciais(cookies, jwt) junto da requisição
+    allow_credentials=True,
+    #permite os metedos como get, post, etc.
+    allow_methods=["*"], 
+    #permite todos os tipos de cabeçalhos numa requisição.
+    allow_headers=["*"],
+)
 
 #include_in_schema => indica se a rota será exibida no /docs ou não.
     #O padrão é que ela será exibida.
@@ -50,32 +66,3 @@ app.include_router(
     prefix='/dwoload',
     tags=['Execel_Exporte']
 )
-
-#Executa o servido altomaticamente quando o arquivo main.py for executado
-if __name__ == "__main__":
-    import uvicorn
-    import config
-    from argparse import ArgumentParser
-
-    #Cria uma pase para o main.py aceitar comando de incialicação como --debug, --port, etc.
-    paremtro = ArgumentParser(description='Inicia o servidor SGU')
-    #Passo o argumento de inicilização, se o paremetro for passado ele e lido como true, e um help para que ele server
-    paremtro.add_argument('--debug', action='store_true', help='Executa em modo debug')
-    paremtro.add_argument('--sqlite', action='store_true', help='Cria um sqlite "banco.db"')
-    #o type -> é o tipo que precisar ser pasado e o Default é o falo padrão caso não passado
-    paremtro.add_argument('--port', type=int, default= 8000, help='Porta do projeto, o padrão: 8000')
-    paremtro.add_argument('--host', type=str, default= "localhost", help='IP do projeto, o padrão: localhost')
-    
-    #Analisa os argumentos
-    args = paremtro.parse_args()
-    
-    config.DEBUG = args.debug
-    config.SQLITE = args.sqlite
-
-    #Só executa se --debug foi passado
-    if args.debug == True:
-        uvicorn.run("main:app", host=args.host ,port=args.port, reload=True)
-    else:
-        #Modo produção (sem reload)
-        uvicorn.run("main:app", host=args.host, port=args.port, reload=False)
-

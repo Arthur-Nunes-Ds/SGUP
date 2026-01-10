@@ -10,9 +10,10 @@ Rota_Cliente = APIRouter()
 #A Depends indica que a rota depende de RolePermitidas
     #assim executa essa classe e utiliza sua resposta
 @Rota_Cliente.delete('/dell_user')
-def dell_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
+def dell_user(id_user: int = Depends(RolePermitidas(['cliente'])),session: Session = Depends(get_session)):
     """Remove o cliente pelo JWT. \
-    \nPermissões: cliente \\ adm.\
+    \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
+    \nPermissões: cliente\
     \nRetorno:\
     \n-{"mensagem": "cliente removido."}\
     \nErros:\
@@ -32,6 +33,7 @@ def dell_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session:
 @Rota_Cliente.post('/editar_cliente')
 def editar_user(base : BaseEditarUsuarioi, id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
     """\nEdita dados do cliente (nome e/ou senha).\
+    \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
     \nPara não alterar um campo, não o envie na requisição.\
     \nParâmetros:\
     \n-nome : str \
@@ -67,8 +69,9 @@ def editar_user(base : BaseEditarUsuarioi, id_user: int = Depends(RolePermitidas
 
 #SECTION - Dados Cliente
 @Rota_Cliente.get('/dados_cliente')
-def dados_user(id_user: int = Depends(RolePermitidas(['cliente','adm'])),session: Session = Depends(get_session)):
+def dados_user(id_user: int = Depends(RolePermitidas(['cliente'])),session: Session = Depends(get_session)):
     """\nObtém os dados do cliente (nome e email).\
+    \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
     \nRetorno:\
     \n-{"mensagem": {"nome": ..., "email": ...}}.\
     \nErros:\

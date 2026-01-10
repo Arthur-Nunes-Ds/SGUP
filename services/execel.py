@@ -12,6 +12,7 @@ Admin_Excel = APIRouter(dependencies=[Depends(RolePermitidas(['adm']))], tags=['
 @Admin_Excel.get('/usuarios.xlsx')
 def get_user():
     """\nExporta a tabela de usuários em formato Excel (.xlsx).\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPermissões: adm.\
         \nRetorno:\
         \n-Arquivo usuarios.xlsx para download.\
@@ -41,6 +42,7 @@ def get_user():
 @Rota_Excel.get('/produtos.xlsx', tags=['Produtos'])
 def get_protudo():
     """\nExporta a tabela de produtos em formato Excel (.xlsx).\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPermissões: adm \\ funcionario.\
         \nRetorno:\
         \n-Arquivo produtos.xlsx para download.\
@@ -62,6 +64,7 @@ def get_protudo():
 @Admin_Excel.get('/all_tabelas.xlsx')
 def get_all():
     """\nExporta todas as tabelas (produtos e usuários) em um único arquivo Excel (.xlsx).\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPermissões: adm.\
         \nRetorno:\
         \n-Arquivo all_tabelas.xlsx para download com múltiplas abas.\

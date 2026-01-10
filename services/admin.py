@@ -6,20 +6,17 @@ from .depeds import RolePermitidas
 from model.usarios import Usuario, BaseCriarUsuario, BaseEditarFucionario
 from model.produtos import Produto
 from typing import Literal
-from dotenv import load_dotenv
-from os import getenv
-from config import DEBUG
-
-load_dotenv()
+from config import DEBUG, SENHA_DB
 
 #Aplica uma dependência em todas as rotas desse arquivo
 Rota_Adm = APIRouter(dependencies=[Depends(RolePermitidas(['adm']))])
 
-#SECTION - Listar User
+#SECTION - Listar User 
 @Rota_Adm.get('/listar_user')
 #O Literal serve como um XOR entre as opções, ou seja, tem que ser exatamente o que está na lista
 def listar_user(role: Literal['cliente', 'fucionario', 'adm'] | None = None, session: Session = Depends(get_session)):
     """\nLista usuários cadastrados, com opção de filtro por role.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nCaso deseje aplicar um filtro para pegar apenas usuários específicos, informe qual das roles deseja.\
         \nParâmetros:\
         \n-role : str (opcional: 'cliente', 'fucionario', 'adm')\
@@ -52,6 +49,7 @@ def listar_user(role: Literal['cliente', 'fucionario', 'adm'] | None = None, ses
 @Rota_Adm.post('/criar_fucionario')
 def criar_fucionario(base: BaseCriarUsuario, session: Session = Depends(get_session)):
     """\nCria um novo funcionário no sistema.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara criar, informe os dados na requisição.\
         \nParâmetros:\
         \n-nome : str \
@@ -78,6 +76,7 @@ def criar_fucionario(base: BaseCriarUsuario, session: Session = Depends(get_sess
 @Rota_Adm.delete('/dell_fucionario/{id_func}')
 def dell_fucionario(id_func: int, session: Session = Depends(get_session)):
     """\nRemove o funcionário pelo ID. \
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
             \nPermissões: adm.\
             \nRetorno:\
             \n-{"mensagem": "funcionário removido."}\
@@ -98,6 +97,7 @@ def dell_fucionario(id_func: int, session: Session = Depends(get_session)):
 @Rota_Adm.post('/editar_fucioanrio')
 def editar_fucionario(base: BaseEditarFucionario, session: Session = Depends(get_session)):
     """\nEdita dados do funcionário (nome e/ou senha).\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara não alterar um campo, não o envie na requisição.\
         \nParâmetros:\
         \n-id : int \
@@ -136,6 +136,7 @@ def editar_fucionario(base: BaseEditarFucionario, session: Session = Depends(get
 @Rota_Adm.delete('/dell_all_user/{senha_db}', include_in_schema=DEBUG, tags=['debug'])
 def dell_all_user(senha_db: str, session: Session = Depends(get_session)):
     """\nATENÇÃO: Deleta todos os usuários da tabela, incluindo o admin.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nOs usuários ainda poderão fazer requisições por 5 minutos por causa do JWT.\
         \nPara que a ação seja permitida, você deve passar a senha do usuário que está usando para manipular o banco.\
         \nParâmetros:\
@@ -145,7 +146,7 @@ def dell_all_user(senha_db: str, session: Session = Depends(get_session)):
         \n-{"mensagem": "tabela USUARIO zerada com sucesso."}.\
         \nErros:\
         \n-401: Você não pode fazer isso."""
-    if senha_db == getenv('SENHA_DB'):
+    if senha_db == SENHA_DB:
         session.query(Usuario).delete()
         session.commit()
         return {'mensagem': 'tabela USUARIO zerada com sucesso'}
@@ -159,6 +160,7 @@ def dell_all_user(senha_db: str, session: Session = Depends(get_session)):
 @Rota_Adm.delete('/dell_all_produtos/{senha_db}',include_in_schema=DEBUG, tags=['debug'])
 def dell_all_produtos(senha_db: str, session: Session = Depends(get_session)):
     """\nATENÇÃO: Deleta todos os produtos da tabela.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara que a ação seja permitida, você deve passar a senha do usuário que está usando para manipular o banco.\
         \nParâmetros:\
         \n-senha_db : str\
@@ -167,7 +169,7 @@ def dell_all_produtos(senha_db: str, session: Session = Depends(get_session)):
         \n-{"mensagem": "tabela PRODUTOS zerada com sucesso."}.\
         \nErros:\
         \n-401: Você não pode fazer isso."""
-    if senha_db == getenv('SENHA_DB'):
+    if senha_db == SENHA_DB:
         session.query(Produto).delete()
         session.commit()
         return {'mensagem': 'tabela PRODUTOS zerada com sucesso'}
@@ -181,6 +183,7 @@ def dell_all_produtos(senha_db: str, session: Session = Depends(get_session)):
 @Rota_Adm.delete('/dell_all/{senha_db}',include_in_schema=DEBUG, tags=['debug'])
 def dell_all(senha_db: str, session: Session = Depends(get_session)):
     """\nATENÇÃO: Deleta tudo das tabelas de PRODUTOS e USUARIOS.\
+        \nAutenticação: Envie o JWT no header: Authorization: Bearer <token>\
         \nPara que a ação seja permitida, você deve passar a senha do usuário que está usando para manipular o banco.\
         \nParâmetros:\
         \n-senha_db : str\
@@ -189,7 +192,7 @@ def dell_all(senha_db: str, session: Session = Depends(get_session)):
         \n-{"mensagem": "tabelas PRODUTOS e USUARIOS zeradas com sucesso."}.\
         \nErros:\
         \n-401: Você não pode fazer isso."""
-    if senha_db == getenv('SENHA_DB'):
+    if senha_db == SENHA_DB:
         session.query(Produto).delete()
         session.query(Usuario).delete()
         session.commit()
