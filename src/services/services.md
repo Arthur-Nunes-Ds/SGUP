@@ -1,0 +1,1 @@
+nessa pasta temos as regras de negócio da aplicação e as rotas da api

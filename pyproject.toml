@@ -1,0 +1,27 @@
+[build-system]
+#define o que ele vai usar para buildar o projeto
+requires = ["setuptools>=42"]
+#define o que ele vai usar como motor
+build-backend = "setuptools.build_meta"
+[project]
+#dados do projeto
+name = "sgu"
+version = "1.2"
+description = "Sistema de Gerenciamento de Usuários"
+#readme do projeto(seria uma espece de docs)
+readme = "README.md"
+#verção minima do python
+requires-python = ">=3.8"
+#dependencias do projeto via o requirements.txt
+dynamic = ["dependencies"]
+
+[project.scripts]
+sgu = "SGU:main"
+
+#finalizando a configuração do requirements
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+#fala onde está o código fonte
+where = ["src"]

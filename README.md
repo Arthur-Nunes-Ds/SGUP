@@ -1,21 +1,17 @@
-<h1 align="center">SGU</h1>
+<h1 align="center">SGU - Sistema de Gerenciamento de Usuários</h1>
 
 # Para iniciar o SGU, utilize o comando abaixo:
-```bash
- python SGU.py
-```
+Atenção: deve escutar o comando:  ```pip install -e .``` para buildar o projeto antes de executar como ```sgu```. caso não tenha feito isso, você pode executar o prjeto atraves do comando: ```python src/SGU.py``` para iniciar o sistema entre tudo você deve estár dentro de src para executar usando o python diretamente.
+
 # Argumentos de inicialização disponíveis:
-- `--debug`: Executa em modo debug com reload automático. Ex.: `python SGU.py --debug`
-- `--sqlite`: Cria/usa o arquivo `banco.db` (SQLite) em vez do banco padrão. Ex.: `python SGU.py --sqlite`
+- `--debug`: Executa em modo debug com reload automático. Ex.: `sgu --debug`
+- `--sqlite`: Cria/usa o arquivo `banco.db` (SQLite) em vez do banco padrão. Ex.: `sgu --sqlite`
 - `--https`: Habilita HTTPS usando `/certs/cert.pem` e `/certs/key.pem` se existirem. 
-O certificado tem que der o nome de `cert.pem` e a chave `key.pem`. Ex.: `python SGU.py --https`
-- `--host <endereco_ip>`: IP onde o servidor escuta (padrão: `localhost`). Ex.: `python SGU.py --host 0.0.0.0`
-- `--port <numero_porta>`: Porta onde o servidor escuta (padrão: `8000`). Ex.: `python SGU.py --port 8080`
-- `--host-fronte <enderecos...>`: Lista de IPs/URLs permitidos para o frontend (padrão: `*`[qualquer um]). Ex.: `python SGU.py --host-fronte http://localhost:3000 http://192.168.1.100:3000`
+O certificado tem que der o nome de `cert.pem` e a chave `key.pem`. Ex.: `sgu --https`
+- `--host <endereco_ip>`: IP onde o servidor escuta (padrão: `localhost`). Ex.: `sgu --host 0.0.0.0`
+- `--port <numero_porta>`: Porta onde o servidor escuta (padrão: `8000`). Ex.: `sgu --port 8080`
+- `--host-fronte <enderecos...>`: Lista de IPs/URLs permitidos para o frontend (padrão: `*`[qualquer um]). Ex.: `sgu --host-fronte http://localhost:3000 http://192.168.1.100:3000`
 
-# Principais recurso usado no projeto:
-
-[![Python](https://img.shields.io/badge/Python-3.8-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.45-D71F00?logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
-[![Pandas](https://img.shields.io/badge/Pandas-2.3.3-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+# Documentação da API
+A documentação da API está disponível em: `http://<host>:<port>/docs` ou `https://<host>:<port>/docs` se HTTPS estiver habilitado.
+Substitua `<host>` e `<port>` pelos valores usados na inicialização do SGU.

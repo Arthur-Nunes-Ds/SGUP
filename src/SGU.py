@@ -1,4 +1,4 @@
-if __name__ == "__main__":
+def main():
     from json import dump
     from pathlib import Path
     from argparse import ArgumentParser
@@ -8,8 +8,8 @@ if __name__ == "__main__":
 
     #para deletar o json_sqlite apos ser o servidor se encerado
     def dell_json_sqlite():
-        json = Path('config/.sgu_config.json')
-        slqlite = Path('banco.db')
+        json = Path('src/temp/.sgu_config.json')
+        slqlite = Path('src/temp/banco.db')
         try:
             #finaliza todas conexação com o banco
             engine.dispose()
@@ -27,6 +27,9 @@ if __name__ == "__main__":
             print(f"Erro ao deletar: {e}")
             #se de algo errado ele para tentar refazer o processo
             dell_json_sqlite()
+        
+        finally:
+            exit()
             
 
         print("\nServidor encerrado. Arquivo de config/temporario removido.")
@@ -51,7 +54,7 @@ if __name__ == "__main__":
     args = paremtro.parse_args()
     
     #add um json temp só para no modo de reload ele não fica redefinindo toda hora
-    with open('config/.sgu_config.json', 'w') as f:
+    with open('src/temp/.sgu_config.json', 'w') as f:
         dump({'DEBUG': args.debug, 'SQLITE': args.sqlite, 'HOST_FRONT': args.host_fronte}, f)
 
     _ssl_certfile = None

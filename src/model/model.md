@@ -1,0 +1,1 @@
+modelos do banco e de como deve enviar os dados para a API.

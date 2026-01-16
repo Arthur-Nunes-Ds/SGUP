@@ -55,7 +55,7 @@ SQLITE = False
 HOST_FRONT = ['*']
 
 #tenta ler do arquivo temporário
-config_file = Path('config/.sgu_config.json')
+config_file = Path('src/temp/.sgu_config.json')
 if config_file.exists():
     with open(config_file, 'r') as f:
         dados = json.load(f)
