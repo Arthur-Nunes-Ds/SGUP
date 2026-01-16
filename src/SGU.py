@@ -1,4 +1,4 @@
-def main():
+if __name__ == "__main__":
     from json import dump
     from pathlib import Path
     from argparse import ArgumentParser
