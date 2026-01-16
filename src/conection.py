@@ -6,7 +6,7 @@ from config import DEBUG, SQLITE, USER_DB,SENHA_DB,IP_DB,PORTA_DB,BANCO_DB
 endereco_db = None
 
 if DEBUG == True and SQLITE == True:
-    endereco_db = "sqlite:///banco.db"
+    endereco_db = "sqlite:///src/temp/banco.db"
 else:  
         endereco_db = f"mysql+pymysql://{USER_DB}:{SENHA_DB}@{IP_DB}:{PORTA_DB}/{BANCO_DB}"
     
@@ -19,7 +19,7 @@ try:
 except OperationalError:
     print('Servidor não consigui se conectar com o MysQLL.\n \
            Iniciando o o sqlite.')
-    engine = create_engine("sqlite:///banco.db")
+    engine = create_engine("sqlite:///src/temp/banco.db")
 
 #Classe base para os modelos
 Base = declarative_base()

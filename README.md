@@ -6,7 +6,7 @@ Atenção: deve escutar o comando:  ```pip install -e .``` para buildar o projet
 # Argumentos de inicialização disponíveis:
 - `--debug`: Executa em modo debug com reload automático. Ex.: `sgu --debug`
 - `--sqlite`: Cria/usa o arquivo `banco.db` (SQLite) em vez do banco padrão. Ex.: `sgu --sqlite`
-- `--https`: Habilita HTTPS usando `/certs/cert.pem` e `/certs/key.pem` se existirem. 
+- `--https`: Habilita HTTPS usando `src/certs/cert.pem` e `src/certs/key.pem` se existirem. 
 O certificado tem que der o nome de `cert.pem` e a chave `key.pem`. Ex.: `sgu --https`
 - `--host <endereco_ip>`: IP onde o servidor escuta (padrão: `localhost`). Ex.: `sgu --host 0.0.0.0`
 - `--port <numero_porta>`: Porta onde o servidor escuta (padrão: `8000`). Ex.: `sgu --port 8080`

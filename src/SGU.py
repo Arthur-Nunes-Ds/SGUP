@@ -60,11 +60,11 @@ def main():
     _ssl_certfile = None
     _ssl_keyfile = None
     if args.https == True: 
-       path_ssl_certfile =Path('certs/cert.pem')
-       path_ssl_keyfile = Path('certs/key.pem')
+       path_ssl_certfile =Path('src/certs/cert.pem')
+       path_ssl_keyfile = Path('src/certs/key.pem')
        if path_ssl_certfile.exists() and path_ssl_keyfile.exists():
-            _ssl_certfile = 'certs/cert.pem' 
-            _ssl_keyfile = 'certs/key.pem' 
+            _ssl_certfile = 'src/certs/cert.pem' 
+            _ssl_keyfile = 'src/certs/key.pem' 
        else:
            print('não foi possivel achar os certificados verifica o nomes deles')
 
