@@ -22,5 +22,6 @@ sgu = "SGU:main"
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
-[tool.setuptools]
-py-modules = ["SGU"]
+[tool.setuptools.packages.find]
+#fala onde está o código fonte
+where = ["src"]
